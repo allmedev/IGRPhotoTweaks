@@ -7,14 +7,23 @@
 //
 
 import Foundation
+import CoreGraphics
+import UIKit
 
 extension IGRCropView {
     
     internal func setupLines() {
-        self.dismiss(self.horizontalCropLines)
-        self.dismiss(self.verticalCropLines)
-        self.dismiss(self.horizontalGridLines)
-        self.dismiss(self.verticalGridLines)
+        if alwaysShowGridLines {
+            self.show(self.horizontalCropLines)
+            self.show(self.verticalCropLines)
+            self.show(self.horizontalGridLines)
+            self.show(self.verticalGridLines)
+        } else {
+            self.dismiss(self.horizontalCropLines)
+            self.dismiss(self.verticalCropLines)
+            self.dismiss(self.horizontalGridLines)
+            self.dismiss(self.verticalGridLines)
+        }
     }
     
     fileprivate func createLine(for className: UIView.Type) -> UIView {
@@ -55,6 +64,7 @@ extension IGRCropView {
     //MARK: Crop Lines
     
     public func updateCropLines(animate: Bool) {
+        guard !alwaysShowGridLines else { return }
         // show crop lines
         self.showCropLines()
         
@@ -71,6 +81,7 @@ extension IGRCropView {
     }
     
     public func dismissCropLines() {
+        guard !alwaysShowGridLines else { return }
         UIView.animate(withDuration: kAnimationDuration, animations: {() -> Void in
             self.dismiss(self.horizontalCropLines)
             self.dismiss(self.verticalCropLines)
@@ -92,6 +103,7 @@ extension IGRCropView {
     //MARK: Crid Lines
     
     public func updateGridLines(animate: Bool) {
+        guard !alwaysShowGridLines else { return }
         // show grid lines
         self.showGridLines()
         
@@ -108,6 +120,7 @@ extension IGRCropView {
     }
     
     public func dismissGridLines() {
+        guard !alwaysShowGridLines else { return }
         UIView.animate(withDuration: kAnimationDuration, animations: {() -> Void in
             self.dismiss(self.horizontalGridLines)
             self.dismiss(self.verticalGridLines)
@@ -117,6 +130,7 @@ extension IGRCropView {
     }
     
     fileprivate func showGridLines() {
+        guard !alwaysShowGridLines else { return }
         if self.isGridLinesDismissed {
             self.isGridLinesDismissed = false
             UIView.animate(withDuration: kAnimationDuration, animations: {() -> Void in

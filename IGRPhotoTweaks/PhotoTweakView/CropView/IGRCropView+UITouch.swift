@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import CoreGraphics
+import UIKit
 
 extension IGRCropView {
     override public func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -21,56 +23,57 @@ extension IGRCropView {
         if touches.count == 1 {
             let location: CGPoint = (touches.first?.location(in: self))!
             var frame: CGRect = self.frame
-            
-            let p0 = CGPoint(x: CGFloat.zero, y: CGFloat.zero)
-            let p1 = CGPoint(x: self.frame.size.width, y: CGFloat.zero)
-            let p2 = CGPoint(x: CGFloat.zero, y: self.frame.size.height)
-            let p3 = CGPoint(x: self.frame.size.width, y: self.frame.size.height)
-            
-            if location.distanceTo(point: p0) < kCropViewHotArea {
-                frame.origin.x += location.x
-                frame.size.width -= location.x
-                frame.origin.y += location.y
-                frame.size.height -= location.y
+
+            if enableManualCropFrameMoving {
+                let p0 = CGPoint(x: CGFloat.zero, y: CGFloat.zero)
+                let p1 = CGPoint(x: self.frame.size.width, y: CGFloat.zero)
+                let p2 = CGPoint(x: CGFloat.zero, y: self.frame.size.height)
+                let p3 = CGPoint(x: self.frame.size.width, y: self.frame.size.height)
+
+                if location.distanceTo(point: p0) < kCropViewHotArea {
+                    frame.origin.x += location.x
+                    frame.size.width -= location.x
+                    frame.origin.y += location.y
+                    frame.size.height -= location.y
+                }
+                else if location.distanceTo(point: p1) < kCropViewHotArea {
+                    frame.size.width = location.x
+                    frame.origin.y += location.y
+                    frame.size.height -= location.y
+                }
+                else if location.distanceTo(point: p2) < kCropViewHotArea {
+                    frame.origin.x += location.x
+                    frame.size.width -= location.x
+                    frame.size.height = location.y
+                }
+                else if location.distanceTo(point: p3) < kCropViewHotArea {
+                    frame.size.width = location.x
+                    frame.size.height = location.y
+                }
+                else if abs(location.x - p0.x) < kCropViewHotArea {
+                    frame.origin.x += location.x
+                    frame.size.width -= location.x
+                }
+                else if abs(location.x - p1.x) < kCropViewHotArea {
+                    frame.size.width = location.x
+                }
+                else if abs(location.y - p0.y) < kCropViewHotArea {
+                    frame.origin.y += location.y
+                    frame.size.height -= location.y
+                }
+                else if abs(location.y - p2.y) < kCropViewHotArea {
+                    frame.size.height = location.y
+                }
+
+                // If Aspect ratio is Freezed reset frame as per the aspect ratio
+                if self.isAspectRatioLocked {
+                    let newHeight = (self.aspectRatioHeight / self.aspectRatioWidth) * frame.size.width
+                    frame = CGRect(x: frame.origin.x,
+                                   y: frame.origin.y,
+                                   width: frame.size.width,
+                                   height: newHeight)
+                }
             }
-            else if location.distanceTo(point: p1) < kCropViewHotArea {
-                frame.size.width = location.x
-                frame.origin.y += location.y
-                frame.size.height -= location.y
-            }
-            else if location.distanceTo(point: p2) < kCropViewHotArea {
-                frame.origin.x += location.x
-                frame.size.width -= location.x
-                frame.size.height = location.y
-            }
-            else if location.distanceTo(point: p3) < kCropViewHotArea {
-                frame.size.width = location.x
-                frame.size.height = location.y
-            }
-            else if abs(location.x - p0.x) < kCropViewHotArea {
-                frame.origin.x += location.x
-                frame.size.width -= location.x
-            }
-            else if abs(location.x - p1.x) < kCropViewHotArea {
-                frame.size.width = location.x
-            }
-            else if abs(location.y - p0.y) < kCropViewHotArea {
-                frame.origin.y += location.y
-                frame.size.height -= location.y
-            }
-            else if abs(location.y - p2.y) < kCropViewHotArea {
-                frame.size.height = location.y
-            }
-            
-            // If Aspect ratio is Freezed reset frame as per the aspect ratio
-            if self.isAspectRatioLocked {
-                let newHeight = (self.aspectRatioHeight / self.aspectRatioWidth) * frame.size.width
-                frame = CGRect(x: frame.origin.x,
-                               y: frame.origin.y,
-                               width: frame.size.width,
-                               height: newHeight)
-            }
-            
             //TODO: Added test cropViewInsideValidFrame
             
             if (frame.size.width > self.cornerBorderLength

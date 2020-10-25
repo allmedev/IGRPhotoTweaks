@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension IGRPhotoTweakView {
     public func changeAngle(radians: CGFloat) {

@@ -13,8 +13,8 @@ extension IGRPhotoTweakViewController {
         self.photoView.resetAspectRect()
     }
     
-    public func setCropAspectRect(aspect: String) {
-        self.photoView.setCropAspectRect(aspect: aspect)
+    public func setCropAspectRect(aspectRatio: CGSize) {
+        self.photoView.setCropAspectRect(aspectRatio: aspectRatio)
     }
     
     public func lockAspectRatio(_ lock: Bool) {

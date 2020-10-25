@@ -10,7 +10,7 @@ import UIKit
 
 extension UIImage {
     
-    func cgImageWithFixedOrientation() -> CGImage? {
+    public func cgImageWithFixedOrientation() -> CGImage? {
         
         guard let cgImage = self.cgImage, let colorSpace = cgImage.colorSpace else {
             return nil
@@ -39,6 +39,8 @@ extension UIImage {
             transform = transform.rotated(by: -0.5 * CGFloat.pi)
             
         case .up, .upMirrored:
+            break
+        @unknown default:
             break
         }
         

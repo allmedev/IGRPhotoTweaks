@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import CoreGraphics
+import UIKit
 
 extension IGRPhotoTweakView {
     
     internal func setupScrollView() {
         self.scrollView.updateDelegate = self
         
-        self.photoContentView.image = image
         self.scrollView.photoContentView = self.photoContentView
     }
 }
@@ -35,11 +36,11 @@ extension IGRPhotoTweakView : UIScrollViewDelegate {
 
 extension IGRPhotoTweakView : IGRPhotoScrollViewDelegate {
     public func scrollViewDidStartUpdateScrollContentOffset(_ scrollView: IGRPhotoScrollView) {
-        self.highlightMask(true, animate: true)
+        self.highlightMask(true, animate: isHighlightMaskAnimated)
     }
     
     public func scrollViewDidStopScrollUpdateContentOffset(_ scrollView: IGRPhotoScrollView) {
         self.updateMasks()
-        self.highlightMask(false, animate: true)
+        self.highlightMask(false, animate: isHighlightMaskAnimated)
     }
 }

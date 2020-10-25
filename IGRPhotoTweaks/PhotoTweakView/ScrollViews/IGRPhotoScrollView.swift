@@ -27,7 +27,7 @@ public class IGRPhotoScrollView: UIScrollView {
     /*
      View for func viewForZooming(in scrollView: UIScrollView)
      */
-    var photoContentView: IGRPhotoContentView!
+    var photoContentView: IGRPhotoContentView?
     
     /*
      The optional scroll delegate.
@@ -121,8 +121,9 @@ public class IGRPhotoScrollView: UIScrollView {
     //MARK: - Zoom
     
     public func zoomScaleToBound() -> CGFloat {
-        let scaleW: CGFloat = self.bounds.size.width / self.photoContentView.bounds.size.width
-        let scaleH: CGFloat = self.bounds.size.height / self.photoContentView.bounds.size.height
+        guard let photoContentView = photoContentView else { return 0 }
+        let scaleW: CGFloat = self.bounds.size.width / photoContentView.bounds.size.width
+        let scaleH: CGFloat = self.bounds.size.height / photoContentView.bounds.size.height
         
         return max(scaleW, scaleH)
     }

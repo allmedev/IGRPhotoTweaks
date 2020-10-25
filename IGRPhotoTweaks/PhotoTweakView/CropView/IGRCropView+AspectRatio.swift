@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension IGRCropView {
     
@@ -15,10 +16,9 @@ extension IGRCropView {
         self.aspectRatioHeight = self.frame.size.height
     }
     
-    public func setCropAspectRect(aspect: String, maxSize: CGSize) {
-        let elements = aspect.components(separatedBy: ":")
-        self.aspectRatioWidth = CGFloat(Float(elements.first!)!)
-        self.aspectRatioHeight = CGFloat(Float(elements.last!)!)
+    public func setCropAspectRect(aspectRatio: CGSize, maxSize: CGSize) {
+        self.aspectRatioWidth = aspectRatio.width
+        self.aspectRatioHeight = aspectRatio.height
         
         var size = maxSize
         let mW = size.width / self.aspectRatioWidth

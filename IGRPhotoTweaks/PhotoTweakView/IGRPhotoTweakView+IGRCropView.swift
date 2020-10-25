@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import CoreGraphics
+import UIKit
 
 extension IGRPhotoTweakView {
     
@@ -19,7 +21,7 @@ extension IGRPhotoTweakView {
 extension IGRPhotoTweakView : IGRCropViewDelegate {
     
     public func cropViewDidStartCrop(_ cropView: IGRCropView) {
-        self.highlightMask(true, animate: true)
+        self.highlightMask(true, animate: isHighlightMaskAnimated)
         self.manualMove = true
     }
     
@@ -68,37 +70,37 @@ extension IGRPhotoTweakView : IGRCropViewDelegate {
                                      y: CGFloat.zero,
                                      width: (newCropBounds.size.width),
                                      height: (newCropBounds.size.height))
-            cropView.center = self.centerPoint
-            
-            // zoom the specified area of scroll view
-            let zoomRect: CGRect = self.convert(scaleFrame,
-                                                to: self.scrollView.photoContentView)
-            self.scrollView.zoom(to: zoomRect, animated: false)
+            cropView.center = self.centerPoint            
         })
-        
+        // zoom the specified area of scroll view
+        let zoomRect: CGRect = self.convert(scaleFrame,
+                                            to: self.scrollView.photoContentView)
+        self.scrollView.zoom(to: zoomRect, animated: false)
+
         self.manualZoomed = true
         
         // update masks
         self.cropView.dismissCropLines()
         self.cropView.dismissGridLines()
         
-        let scaleH: CGFloat = self.scrollView.bounds.size.height / self.scrollView.contentSize.height
-        let scaleW: CGFloat = self.scrollView.bounds.size.width / self.scrollView.contentSize.width
-        var scaleM: CGFloat = max(scaleH, scaleW)
-        scaleM = min(1.0, scaleM)
-        
-        UIView.animate(withDuration: kAnimationDuration, animations: {() -> Void in
-            self.scrollView.checkContentOffset()
-            self.cropView.layoutIfNeeded()
-        })
-        
-        self.highlightMask(false, animate: true)
+        self.scrollView.checkContentOffset()
+        self.cropView.layoutIfNeeded()
+
+        self.highlightMask(false, animate: isHighlightMaskAnimated)
         self.manualMove = false
     }
     
     public func cropViewInsideValidFrame(for point: CGPoint, from cropView: IGRCropView) -> Bool {
-        let updatedPoint = self.convert(point, to: self.scrollView.photoContentView)
-        let frame =  self.scrollView.photoContentView.frame
+        guard let photoContentView = self.scrollView.photoContentView else { return false }
+        let updatedPoint = self.convert(point, to: photoContentView)
+        let frame = photoContentView.frame
         return frame.contains(updatedPoint)
+    }
+
+    public func scrollTo(rect: CGRect) {
+        // zoom the specified area of scroll view
+        let zoomRect: CGRect = self.convert(rect, to: self.scrollView.photoContentView)
+        self.scrollView.minimumZoomScale = self.scrollView.zoomScaleToBound()
+        self.scrollView.zoom(to: zoomRect, animated: false)
     }
 }

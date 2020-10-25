@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreGraphics
 
 extension IGRPhotoTweakView {
     public func resetAspectRect() {
@@ -20,8 +21,9 @@ extension IGRPhotoTweakView {
         self.cropViewDidStopCrop(self.cropView)
     }
     
-    public func setCropAspectRect(aspect: String) {
-        self.cropView.setCropAspectRect(aspect: aspect, maxSize:self.originalSize)
+    public func setCropAspectRect(aspectRatio: CGSize) {
+        self.aspectRatio = aspectRatio
+        self.cropView.setCropAspectRect(aspectRatio: aspectRatio, maxSize:self.originalSize)
         self.cropView.center = self.scrollView.center
         
         self.cropViewDidStopCrop(self.cropView)

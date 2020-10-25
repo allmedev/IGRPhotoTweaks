@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import CoreGraphics
+import UIKit
 
 public protocol IGRPhotoTweakViewCustomizationDelegate : class {
     /*
@@ -46,38 +48,38 @@ public protocol IGRPhotoTweakViewCustomizationDelegate : class {
 extension IGRPhotoTweakView {
     
     func borderColor() -> UIColor {
-        return (self.customizationDelegate?.borderColor())!
+        return self.customizationDelegate?.borderColor() ?? .clear
     }
     
     func borderWidth() -> CGFloat {
-        return (self.customizationDelegate?.borderWidth())!
+        return self.customizationDelegate?.borderWidth() ?? 0
     }
     
     func cornerBorderWidth() -> CGFloat {
-        return (self.customizationDelegate?.cornerBorderWidth())!
+        return self.customizationDelegate?.cornerBorderWidth() ?? 0
     }
     
     func cornerBorderLength() -> CGFloat {
-        return (self.customizationDelegate?.cornerBorderLength())!
+        return self.customizationDelegate?.cornerBorderLength() ?? 0
     }
     
     func cropLinesCount() -> Int {
-        return (self.customizationDelegate?.cropLinesCount())!
+        return self.customizationDelegate?.cropLinesCount() ?? 0
     }
     
     func gridLinesCount() -> Int {
-        return (self.customizationDelegate?.gridLinesCount())!
+        return self.customizationDelegate?.gridLinesCount() ?? 0
     }
     
     func isHighlightMask() -> Bool {
-        return (self.customizationDelegate?.isHighlightMask())!
+        return self.customizationDelegate?.isHighlightMask() ?? false
     }
     
     func highlightMaskAlphaValue() -> CGFloat {
-        return (self.customizationDelegate?.highlightMaskAlphaValue())!
+        return self.customizationDelegate?.highlightMaskAlphaValue() ?? 0
     }
     
     func canvasInsets() -> UIEdgeInsets {
-        return (self.customizationDelegate?.canvasInsets())!
+        return self.customizationDelegate?.canvasInsets() ?? .zero
     }
 }

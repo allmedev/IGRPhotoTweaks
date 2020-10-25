@@ -6,6 +6,7 @@
 //  Copyright © 2017 IGR Software. All rights reserved.
 //
 
+import CoreGraphics
 import UIKit
 
 public protocol IGRCropViewDelegate : class {
@@ -33,7 +34,11 @@ public protocol IGRCropViewDelegate : class {
 public class IGRCropView: UIView {
     
     //MARK: - Public VARs
-    
+
+    public var enableManualCropFrameMoving: Bool = false
+
+    public var alwaysShowGridLines: Bool = true
+
     /*
      The optional View Delegate.
      */
