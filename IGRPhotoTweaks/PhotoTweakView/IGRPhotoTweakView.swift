@@ -149,13 +149,13 @@ public class IGRPhotoTweakView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        if !manualMove {
+//        if !manualMove {
             self.originalSize = self.maxBounds().size
             self.scrollView.center = self.centerPoint
             
             self.cropView.center = self.scrollView.center
             self.scrollView.checkContentOffset()
-        }
+//        }
     }
     
     //MARK: - Public FUNCs
@@ -163,7 +163,7 @@ public class IGRPhotoTweakView: UIView {
     public func getRadians() -> CGFloat { return radians }
     
     public func resetView() {
-        UIView.animate(withDuration: kAnimationDuration, animations: {() -> Void in
+//        UIView.animate(withDuration: kAnimationDuration, animations: {() -> Void in
             self.radians = CGFloat.zero
             self.scrollView.transform = CGAffineTransform.identity
             self.scrollView.center = self.centerPoint
@@ -176,7 +176,7 @@ public class IGRPhotoTweakView: UIView {
             
             self.cropView.frame = self.scrollView.frame
             self.cropView.center = self.scrollView.center
-        })
+//        })
     }
     
     public func applyDeviceRotation() {
@@ -258,6 +258,9 @@ public class IGRPhotoTweakView: UIView {
     }
 
     private func updatePhotoContentView() {
+        let savedZoom = scrollView.zoomScale
+        scrollView.zoomScale = scrollView.minimumZoomScale
+
         layoutIfNeeded()
         scrollView.contentSize = scrollView.bounds.size
 
@@ -273,6 +276,10 @@ public class IGRPhotoTweakView: UIView {
                             height: (image.size.height / scale))
 
         photoContentView.frame = CGRect(origin: .zero, size: bounds.size)
+
+        let zoom = self.scrollView.zoomScaleToBound()
+        self.scrollView.setZoomScale(max(savedZoom, zoom), animated: false)
+        self.scrollView.checkContentOffset()
     }
     
 }

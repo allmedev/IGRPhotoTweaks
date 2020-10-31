@@ -64,14 +64,11 @@ extension IGRPhotoTweakView : IGRCropViewDelegate {
                                        y: (contentOffsetCenter.y - self.scrollView.bounds.size.height.half))
         self.scrollView.contentOffset = newContentOffset
         
-        UIView.animate(withDuration: kAnimationDuration, animations: {() -> Void in
-            // animate crop view
-            cropView.bounds = CGRect(x: CGFloat.zero,
-                                     y: CGFloat.zero,
-                                     width: (newCropBounds.size.width),
-                                     height: (newCropBounds.size.height))
-            cropView.center = self.centerPoint            
-        })
+        cropView.bounds = CGRect(x: CGFloat.zero,
+                                 y: CGFloat.zero,
+                                 width: (newCropBounds.size.width),
+                                 height: (newCropBounds.size.height))
+        cropView.center = self.centerPoint
         // zoom the specified area of scroll view
         let zoomRect: CGRect = self.convert(scaleFrame,
                                             to: self.scrollView.photoContentView)
@@ -99,8 +96,8 @@ extension IGRPhotoTweakView : IGRCropViewDelegate {
 
     public func scrollTo(rect: CGRect) {
         // zoom the specified area of scroll view
-        let zoomRect: CGRect = self.convert(rect, to: self.scrollView.photoContentView)
         self.scrollView.minimumZoomScale = self.scrollView.zoomScaleToBound()
-        self.scrollView.zoom(to: zoomRect, animated: false)
+        self.scrollView.zoom(to: rect, animated: false)
+        self.manualZoomed = true
     }
 }
